@@ -1,13 +1,18 @@
+
 <template>
+  
   <div class="container">
     <!-- Nav -->
+
     <div>
       <ul class="nav justify-content-between pb-2">
-        <li class="nav-item">
+        <li class="nav-item d-inline-flex flex-row">
           <h3 id="titulo">Tabla de Hamburguesas</h3>
+          <div id="img-hamburguesa" ></div>
         </li>
 
         <!-- Botón Crear -->
+
         <span class="d-flex justify-content-end">
           <li class="nav-item pe-3">
             <button
@@ -20,7 +25,8 @@
             </button>
           </li>
 
-          <!-- Input Search -->
+          <!-- Input Buscar -->
+
           <li class="nav-item">
             <div class="input-group mb-3">
               <input
@@ -49,18 +55,21 @@
           <th scope="row">{{ hamburguesa.id }}</th>
           <td>{{ toCapitalFirst(hamburguesa.nombre) }}</td>
           <td>
+
             <!-- Botón Editar -->
+          
             <button
               type="button"
               class="btn btn-warning crud-button"
-              data-bs-toggle="tooltip"
               data-bs-placement="bottom"
               title="Editar"
+              @click="editarHamburguesa(hamburguesa)"
             >
               <font-awesome-icon icon="pencil" />
             </button>
 
             <!-- Botón Ver -->
+
             <button
               type="button"
               class="btn btn-success crud-button"
@@ -73,6 +82,7 @@
             </button>
 
             <!-- Botón Borrar -->
+
             <button
               type="button"
               class="btn btn-danger crud-button"
@@ -87,9 +97,8 @@
       </tbody>
     </table>
 
-    <FormularioHamburguesa />
-
     <!-- Modal Botón Ver-->
+
     <div class="modal fade" id="modalButtonVer" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -103,7 +112,8 @@
             ></button>
           </div>
           <div class="modal-body">
-            <!-- Lista -->
+ 
+            <!-- Lista de Ingredientes en Modal Ver -->
 
             <ul class="list-group">
               <li class="list-group-item">
@@ -133,17 +143,78 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Botón Crear -->
+
+  <div
+    class="modal fade"
+    id="formularioCreacion"
+    tabindex="-1"
+    ref="formularioCreacion"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formularioCreacionLabel">
+            <strong>Crea tu Hamburguesa</strong>
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <FormularioHamburguesa :cerrarModal="cerrarModalCrear" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Botón Editar -->
+  <div
+    class="modal fade"
+    id="formularioEdit"
+    tabindex="-1"
+    ref="formularioEdit"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formularioEditLabel">
+            <strong>Edita tu Hamburguesa</strong>
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <FormularioEdit
+            :hamburguesa="hamburguesaSeleccionada"
+            :cerrarModal="cerrarModalEditar"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-
-
-
 <script>
+
+// Imports de los Componentes
+import { Modal } from "bootstrap";
 import FormularioHamburguesa from "@/components/FormularioHamburguesa.vue";
+import FormularioEdit from "@/components/FormularioEdit.vue";
 
 export default {
   components: {
+    //Declaración de los Componentes
     FormularioHamburguesa,
+    FormularioEdit,
   },
 
   data() {
@@ -156,6 +227,8 @@ export default {
         calorias: null,
       },
       palabraBuscada: "",
+      modalCrear: null,
+      modalEditar: null,
     };
   },
 
@@ -176,10 +249,34 @@ export default {
     verDetalles(burger) {
       this.hamburguesaSeleccionada = burger;
     },
+
+    crearHamburguesa() {
+      this.modalCrear.show();
+    },
+
+    editarHamburguesa(hamburguesa) {
+      this.hamburguesaSeleccionada = hamburguesa;
+      this.modalEditar.show();
+    },
+
+    cerrarModalCrear() {
+      this.modalCrear.hide();
+      this.getHamburguesas();
+    },
+
+    cerrarModalEditar() {
+      this.modalEditar.hide();
+      this.getHamburguesas();
+    },
   },
 
   created() {
     this.getHamburguesas();
+  },
+
+  mounted() {
+    this.modalCrear = new Modal(this.$refs.formularioCreacion);
+    this.modalEditar = new Modal(this.$refs.formularioEdit);
   },
 
   computed: {
@@ -199,16 +296,22 @@ export default {
 
 
 <style>
+
+#img-hamburguesa {
+  background-image: url("../assets/hamburguesa.png");
+  background-size: contain;
+  height: 50px;
+  width: 50px;
+}
 .crud-button {
-  width: 10%;
   height: 7%;
-  /* color: #fff; */
   margin-right: 15px;
 }
 
 #titulo {
   font-weight: 700;
   font-size: 2rem;
+  padding-right: 10px;;
 }
 
 .subtitle {
