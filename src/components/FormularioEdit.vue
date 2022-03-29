@@ -1,5 +1,5 @@
 <template>
-  <!-- Form Creación de Nombre de Hamburguesa -->
+  <!-- Form Editar Nombre de Hamburguesa -->
 
   <div class="form-floating mb-3">
     <input

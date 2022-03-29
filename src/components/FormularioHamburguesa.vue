@@ -28,6 +28,7 @@
           class="form-check-input"
           type="checkbox"
           id="inlineCheckbox1"
+          :checked="uncheckIngredientes(ingrediente.nombre)"
           @change="agregarIngrediente(ingrediente)"
         />
         <label class="form-check-label" for="inlineCheckbox1">{{
@@ -50,7 +51,7 @@
 
 <script>
 export default {
-  props: ["cerrarModal"],
+  props: ["cerrarModal", "limpiar"],
   data() {
     return {
       nombre: "",
@@ -137,6 +138,12 @@ export default {
           this.cerrarModal()
         });
     },
+
+    uncheckIngredientes(nombre) {
+      return this.ingredientesSeleccionados.some(
+        (ingrediente) => ingrediente === nombre
+      );
+    },
   },
 
   computed: {
@@ -151,6 +158,13 @@ export default {
       return false;
     },
   },
+  watch: {
+    limpiar(){
+      this.nombre= ""
+      this.calorias= 0
+      this.ingredientesSeleccionados= []
+    }
+  }
 };
 </script>
 
