@@ -67,7 +67,7 @@ export default {
       },
       calorias: 0,
       ingredientesSeleccionados: [],
-      ingredientes: [
+      ingredientes: [ // Se decidió hacer una lista preestablecida de ingredientes disponibles con su respectiva caloría asociada.
         {
           nombre: "Hamburguesa",
           calorias: 295,

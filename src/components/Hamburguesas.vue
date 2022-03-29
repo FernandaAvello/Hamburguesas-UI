@@ -282,7 +282,7 @@ export default {
         });
     },
 
-    toCapitalFirst(nombre) {
+    toCapitalFirst(nombre) { // Se busca que al mostrar el nombre de una hamburguesa en la tabla, siempre aparezca con mayuscula al principio.
       return nombre.charAt(0).toUpperCase() + nombre.slice(1);
     },
 
@@ -333,14 +333,14 @@ export default {
     this.getHamburguesas();
   },
 
-  mounted() {
+  mounted() { //Se crean instancias de los modales para cerrar y abrirlos via JS
     this.modalCrear = new Modal(this.$refs.formularioCreacion);
     this.modalEditar = new Modal(this.$refs.formularioEdit);
     this.modalBorrar = new Modal(this.$refs.modalButtonBorrar)
   },
 
   computed: {
-    hamburguesasFiltradas() {
+    hamburguesasFiltradas() { // Se hace este computed property para filtrar la tabla de hamnburguesas segun la palabra escrita en el input de "Buscar"
       return this.listaDeHamburguesas.filter((burger) => {
         return (
           burger.nombre
