@@ -1,14 +1,14 @@
 
 <template>
-  
   <div class="container">
+   
     <!-- Nav -->
 
     <div>
       <ul class="nav justify-content-between pb-2">
         <li class="nav-item d-inline-flex flex-row">
-          <h3 id="titulo">Tabla de Hamburguesas</h3>
-          <div id="img-hamburguesa" ></div>
+          <h3 id="titulo"><strong>Tabla de Hamburguesas</strong></h3>
+          <div id="img-hamburguesa"></div>
         </li>
 
         <!-- Botón Crear -->
@@ -40,14 +40,16 @@
         </span>
       </ul>
     </div>
+    <br>
 
     <!-- Table -->
+
     <table class="table table-bordered table-responsive">
       <thead class="table-light">
         <tr>
           <th scope="col" class="subtitle">#ID</th>
           <th scope="col" class="subtitle">Nombre</th>
-          <th scope="col" class="col-md-4 subtitle">Actions</th>
+          <th scope="col" class="col-md-4 subtitle">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -57,7 +59,7 @@
           <td>
 
             <!-- Botón Editar -->
-          
+
             <button
               type="button"
               class="btn btn-warning crud-button"
@@ -85,10 +87,10 @@
 
             <button
               type="button"
-              class="btn btn-danger crud-button"
-              data-bs-toggle="tooltip"
+              class="btn btn-danger crud-button"       
               data-bs-placement="bottom"
               title="Eliminar"
+              @click="abrirModalBorrar(hamburguesa)"
             >
               <font-awesome-icon icon="trash-can" />
             </button>
@@ -97,13 +99,73 @@
       </tbody>
     </table>
 
+
+     <!-- Modal Botón Crear -->
+
+  <div
+    class="modal fade"
+    id="formularioCreacion"
+    tabindex="-1"
+    ref="formularioCreacion"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formularioCreacionLabel">
+            <strong>Crea tu Hamburguesa</strong>
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <FormularioHamburguesa :cerrarModal="cerrarModalCrear" :limpiar="ejecutarLimpieza" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- Modal Botón Editar -->
+
+  <div
+    class="modal fade"
+    id="formularioEdit"
+    tabindex="-1"
+    ref="formularioEdit"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formularioEditLabel">
+            <strong>Edita tu Hamburguesa</strong>
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <FormularioEdit
+            :hamburguesa="hamburguesaSeleccionada"
+            :cerrarModal="cerrarModalEditar"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
     <!-- Modal Botón Ver-->
 
     <div class="modal fade" id="modalButtonVer" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modalButtonVerLabel">Detalles</h5>
+            <h5 class="modal-title" id="modalButtonVerLabel"><strong>Detalles</strong></h5>
             <button
               type="button"
               class="btn-close"
@@ -112,7 +174,7 @@
             ></button>
           </div>
           <div class="modal-body">
- 
+
             <!-- Lista de Ingredientes en Modal Ver -->
 
             <ul class="list-group">
@@ -144,20 +206,18 @@
     </div>
   </div>
 
-  <!-- Modal Botón Crear -->
+  <!-- Modal Botón Borrar -->
 
   <div
     class="modal fade"
-    id="formularioCreacion"
+    id="modalButtonBorrar"
     tabindex="-1"
-    ref="formularioCreacion"
+    ref="modalButtonBorrar"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="formularioCreacionLabel">
-            <strong>Crea tu Hamburguesa</strong>
-          </h5>
+          <h5 class="modal-title" id="confirmacionBorrarLabel"><strong>Eliminar Hamburguesa</strong></h5>
           <button
             type="button"
             class="btn-close"
@@ -165,46 +225,24 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">
-          <FormularioHamburguesa :cerrarModal="cerrarModalCrear" />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Botón Editar -->
-  <div
-    class="modal fade"
-    id="formularioEdit"
-    tabindex="-1"
-    ref="formularioEdit"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="formularioEditLabel">
-            <strong>Edita tu Hamburguesa</strong>
-          </h5>
+        <div class="modal-body">¿Estás seguro que deseas borrar la hamburguesa seleccionada?</div>
+        <div class="modal-footer">
           <button
             type="button"
-            class="btn-close"
+            class="btn btn-secondary"
             data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <FormularioEdit
-            :hamburguesa="hamburguesaSeleccionada"
-            :cerrarModal="cerrarModalEditar"
-          />
+          >
+            No
+          </button>
+          <button type="button" class="btn btn-primary" @click="eliminarHamburguesa">Sí</button>
         </div>
       </div>
     </div>
   </div>
-</template>
+</template> 
+
 
 <script>
-
 // Imports de los Componentes
 import { Modal } from "bootstrap";
 import FormularioHamburguesa from "@/components/FormularioHamburguesa.vue";
@@ -229,6 +267,8 @@ export default {
       palabraBuscada: "",
       modalCrear: null,
       modalEditar: null,
+      modalBorrar: null,
+      ejecutarLimpieza: false,
     };
   },
 
@@ -251,6 +291,7 @@ export default {
     },
 
     crearHamburguesa() {
+      this.ejecutarLimpieza = false
       this.modalCrear.show();
     },
 
@@ -260,6 +301,7 @@ export default {
     },
 
     cerrarModalCrear() {
+      this.ejecutarLimpieza = true
       this.modalCrear.hide();
       this.getHamburguesas();
     },
@@ -267,7 +309,24 @@ export default {
     cerrarModalEditar() {
       this.modalEditar.hide();
       this.getHamburguesas();
+
     },
+
+    eliminarHamburguesa() {
+     this.$http
+        .delete(`https://prueba-hamburguesas.herokuapp.com/burger/${this.hamburguesaSeleccionada.id}`)
+        .then((response) => {
+        console.log(response);
+        this.modalBorrar.hide();
+        this.getHamburguesas();
+        })
+    },
+
+    abrirModalBorrar(hamburguesa) {
+      this.hamburguesaSeleccionada = hamburguesa
+      this.modalBorrar.show();
+    }
+
   },
 
   created() {
@@ -277,6 +336,7 @@ export default {
   mounted() {
     this.modalCrear = new Modal(this.$refs.formularioCreacion);
     this.modalEditar = new Modal(this.$refs.formularioEdit);
+    this.modalBorrar = new Modal(this.$refs.modalButtonBorrar)
   },
 
   computed: {
@@ -296,7 +356,6 @@ export default {
 
 
 <style>
-
 #img-hamburguesa {
   background-image: url("../assets/hamburguesa.png");
   background-size: contain;
@@ -311,7 +370,7 @@ export default {
 #titulo {
   font-weight: 700;
   font-size: 2rem;
-  padding-right: 10px;;
+  padding-right: 10px;
 }
 
 .subtitle {
